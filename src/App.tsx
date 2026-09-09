@@ -2,9 +2,9 @@ import { Routes, Route } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute";
+import AIChat from "./components/AIChat";
 
 import Home from "./pages/Home";
-
 import Flights from "./pages/Flights";
 import FlightDetails from "./pages/FlightDetails";
 import Booking from "./pages/Booking";
@@ -16,7 +16,6 @@ import HotelBooking from "./pages/HotelBooking";
 import HotelBookingSuccess from "./pages/HotelBookingSuccess";
 
 import Favorites from "./pages/Favorites";
-
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Profile from "./pages/Profile";
@@ -27,63 +26,29 @@ function App() {
       <Navbar />
 
       <Routes>
+        {/* Home */}
+        <Route path="/" element={<Home />} />
 
-        {/* Public Routes */}
+        {/* Flights */}
+        <Route path="/flights" element={<Flights />} />
+        <Route path="/flights/:id" element={<FlightDetails />} />
 
-        <Route
-          path="/"
-          element={<Home />}
-        />
+        {/* Hotels */}
+        <Route path="/hotels" element={<Hotels />} />
+        <Route path="/hotels/:id" element={<HotelDetails />} />
 
-        <Route
-          path="/flights"
-          element={<Flights />}
-        />
+        {/* Favorites */}
+        <Route path="/favorites" element={<Favorites />} />
 
-        <Route
-          path="/flights/:id"
-          element={<FlightDetails />}
-        />
-
-        <Route
-          path="/hotels"
-          element={<Hotels />}
-        />
-
-        <Route
-          path="/hotels/:id"
-          element={<HotelDetails />}
-        />
-
-        <Route
-          path="/favorites"
-          element={<Favorites />}
-        />
-
-        <Route
-          path="/login"
-          element={<Login />}
-        />
-
-        <Route
-          path="/register"
-          element={<Register />}
-        />
-
+        {/* Authentication */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
 
         {/* Protected Routes */}
-
         <Route element={<ProtectedRoute />}>
+          <Route path="/profile" element={<Profile />} />
 
-          <Route
-            path="/profile"
-            element={<Profile />}
-          />
-
-          <Route
-            path="/booking"
-            element={<Booking />}
-          />
+          <Route path="/booking" element={<Booking />} />
 
           <Route
             path="/booking-success"
@@ -99,16 +64,13 @@ function App() {
             path="/hotel-booking-success"
             element={<HotelBookingSuccess />}
           />
-
         </Route>
 
-
         {/* 404 */}
-
         <Route
           path="*"
           element={
-            <main
+            <div
               style={{
                 minHeight: "70vh",
                 display: "flex",
@@ -116,18 +78,26 @@ function App() {
                 justifyContent: "center",
                 flexDirection: "column",
                 gap: "10px",
+                padding: "40px 20px",
+                textAlign: "center",
               }}
             >
-              <h1>404</h1>
+              <h1 style={{ fontSize: "64px", margin: 0 }}>404</h1>
 
-              <p>
+              <h2 style={{ margin: 0 }}>
                 Page not found
+              </h2>
+
+              <p style={{ color: "#64748b", margin: 0 }}>
+                The page you are looking for does not exist.
               </p>
-            </main>
+            </div>
           }
         />
-
       </Routes>
+
+      {/* AI Travel Assistant */}
+      <AIChat />
     </>
   );
 }
