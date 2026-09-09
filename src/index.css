@@ -395,8 +395,9 @@ img {
   transform: scale(1.04);
 }
 
-.favorite-btn {
-  position: absolute;
+.flight-search-card {
+  position: relative;
+
   top: 14px;
   right: 14px;
 
@@ -8685,4 +8686,14 @@ img {
     right: 18px;
     bottom: 18px;
   }
+}
+/* Fix Flights hero overlap */
+.flight-hero {
+  padding-bottom: 80px;
+}
+
+.flight-search-card {
+  position: relative;
+  margin-top: 40px;
+  z-index: 5;
 }
