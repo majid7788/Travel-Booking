@@ -8697,3 +8697,51 @@ img {
   margin-top: 40px;
   z-index: 5;
 }
+/* =========================================
+   FLIGHTS HERO - FIX SEARCH CARD OVERLAP
+========================================= */
+
+.flight-hero {
+  position: relative;
+  min-height: 650px;
+  padding: 55px 20px 80px;
+  overflow: visible;
+}
+
+/* Hero title/content */
+.flight-hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-bottom: 35px;
+}
+
+.flight-hero-content h1 {
+  position: relative;
+  z-index: 2;
+  margin-bottom: 18px;
+}
+
+/* Search card */
+.flight-search-card {
+  position: relative !important;
+  top: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  left: auto !important;
+
+  z-index: 10;
+
+  width: min(1200px, calc(100% - 40px));
+  margin: 25px auto 0;
+
+  transform: none !important;
+}
+
+/* Make sure the hero text stays above the background */
+.flight-hero-content,
+.flight-hero-content h1,
+.flight-hero-content p {
+  z-index: 2;
+}
