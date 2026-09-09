@@ -8,9 +8,13 @@ import App from "./App";
 import { FavoritesProvider } from "./context/FavoritesContext";
 import { AuthProvider } from "./context/AuthContext";
 
+const basename = import.meta.env.PROD
+  ? "/Travel-Booking"
+  : "/";
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename={basename}>
       <AuthProvider>
         <FavoritesProvider>
           <App />
