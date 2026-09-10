@@ -7,6 +7,8 @@ import {
   User,
 } from "lucide-react";
 
+import { flights } from "../data/flights";
+
 type Message = {
   id: number;
   sender: "ai" | "user";
@@ -26,7 +28,7 @@ function AIChat() {
     {
       id: 2,
       sender: "ai",
-      text: "How can I help you with your trip today?",
+      text: "I can help you find flights, prices, departure times, hotels, and destinations. ✈️",
     },
   ]);
 
@@ -35,7 +37,6 @@ function AIChat() {
 
     if (!text) return;
 
-    // Add user message
     const userMessage: Message = {
       id: Date.now(),
       sender: "user",
@@ -43,11 +44,8 @@ function AIChat() {
     };
 
     setMessages((prev) => [...prev, userMessage]);
-
-    // Clear input
     setMessage("");
 
-    // Automatic AI response
     setTimeout(() => {
       const aiMessage: Message = {
         id: Date.now() + 1,
@@ -56,30 +54,169 @@ function AIChat() {
       };
 
       setMessages((prev) => [...prev, aiMessage]);
-    }, 700);
+    }, 500);
   };
 
-  const getAIResponse = (text: string) => {
-    const lowerText = text.toLowerCase();
+  const getAIResponse = (text: string): string => {
+    const lowerText = text.toLowerCase().trim();
+
+    /* =========================
+       GREETING
+    ========================= */
 
     if (
       lowerText.includes("hello") ||
       lowerText.includes("hi") ||
       lowerText.includes("hey") ||
       lowerText.includes("اهلا") ||
-      lowerText.includes("مرحبا")
+      lowerText.includes("أهلا") ||
+      lowerText.includes("مرحبا") ||
+      lowerText.includes("السلام عليكم")
     ) {
-      return "👋 Hello! How can I help you with flights, hotels, or your trip?";
+      return "👋 Welcome to TravelBook! I can help you with flights, prices, schedules, hotels, and destinations. ✈️";
     }
+
+    /* =========================
+       DESTINATION DETECTION
+    ========================= */
+
+    let destination = "";
+
+    if (
+      lowerText.includes("dubai") ||
+      lowerText.includes("دبي") ||
+      lowerText.includes("الإمارات") ||
+      lowerText.includes("الامارات") ||
+      lowerText.includes("uae")
+    ) {
+      destination = "DXB";
+    }
+
+    if (
+      lowerText.includes("istanbul") ||
+      lowerText.includes("اسطنبول") ||
+      lowerText.includes("إسطنبول") ||
+      lowerText.includes("تركيا") ||
+      lowerText.includes("turkey")
+    ) {
+      destination = "IST";
+    }
+
+    if (
+      lowerText.includes("doha") ||
+      lowerText.includes("الدوحة") ||
+      lowerText.includes("قطر") ||
+      lowerText.includes("qatar")
+    ) {
+      destination = "DOH";
+    }
+
+    if (
+      lowerText.includes("cairo") ||
+      lowerText.includes("القاهرة") ||
+      lowerText.includes("مصر") ||
+      lowerText.includes("egypt")
+    ) {
+      destination = "CAI";
+    }
+
+    /* =========================
+       FLIGHT SEARCH
+    ========================= */
+
+    if (destination) {
+      const destinationFlights = flights.filter(
+        (flight) =>
+          flight.to === destination ||
+          flight.from === destination
+      );
+
+      if (destinationFlights.length === 0) {
+        return "✈️ Sorry, I couldn't find any flights for this destination in our current flight database.";
+      }
+
+      const destinationNames: Record<string, string> = {
+        DXB: "Dubai 🇦🇪",
+        IST: "Istanbul 🇹🇷",
+        DOH: "Doha 🇶🇦",
+        CAI: "Cairo 🇪🇬",
+      };
+
+      const destinationName =
+        destinationNames[destination] || destination;
+
+      const sortedFlights = [...destinationFlights].sort(
+        (a, b) => a.price - b.price
+      );
+
+      let response = `✈️ Flights available for ${destinationName}\n\n`;
+
+      sortedFlights.forEach((flight) => {
+        response +=
+          `🛫 ${flight.airline} (${flight.flightNumber})\n` +
+          `   ${flight.from} → ${flight.to}\n` +
+          `   🕐 ${flight.departure} → ${flight.arrival}\n` +
+          `   ⏱️ ${flight.duration}\n` +
+          `   💰 $${flight.price}\n` +
+          `   ${flight.stops === 0 ? "✅ Direct flight" : `🔄 ${flight.stops} stop(s)`}\n\n`;
+      });
+
+      response +=
+        "Would you like me to help you choose the best flight? ✈️";
+
+      return response;
+    }
+
+    /* =========================
+       PRICE QUESTIONS
+    ========================= */
+
+    if (
+      lowerText.includes("price") ||
+      lowerText.includes("prices") ||
+      lowerText.includes("cost") ||
+      lowerText.includes("سعر") ||
+      lowerText.includes("اسعار") ||
+      lowerText.includes("أسعار") ||
+      lowerText.includes("بكام") ||
+      lowerText.includes("كام")
+    ) {
+      return "💰 Sure! Tell me the destination, for example:\n\n• Flights to Dubai\n• رحلات دبي بكام؟\n• Flights to Istanbul\n• رحلات تركيا\n\nI'll show you the available prices and schedules.";
+    }
+
+    /* =========================
+       SCHEDULE QUESTIONS
+    ========================= */
+
+    if (
+      lowerText.includes("time") ||
+      lowerText.includes("schedule") ||
+      lowerText.includes("departure") ||
+      lowerText.includes("مواعيد") ||
+      lowerText.includes("موعد") ||
+      lowerText.includes("ميعاد") ||
+      lowerText.includes("الساعة")
+    ) {
+      return "🕐 I can show you available departure and arrival times. Just tell me your destination, for example: \"مواعيد رحلات دبي\".";
+    }
+
+    /* =========================
+       FLIGHT QUESTIONS
+    ========================= */
 
     if (
       lowerText.includes("flight") ||
       lowerText.includes("flights") ||
       lowerText.includes("طيران") ||
-      lowerText.includes("رحلة")
+      lowerText.includes("رحلة") ||
+      lowerText.includes("رحلات")
     ) {
-      return "✈️ Sure! I can help you find flights. Tell me your departure city and destination.";
+      return "✈️ I can help you find flights. Tell me the destination, such as Dubai, Istanbul, or Doha, and I'll show you the available airlines, prices, and schedules.";
     }
+
+    /* =========================
+       HOTEL QUESTIONS
+    ========================= */
 
     if (
       lowerText.includes("hotel") ||
@@ -87,51 +224,68 @@ function AIChat() {
       lowerText.includes("فندق") ||
       lowerText.includes("فنادق")
     ) {
-      return "🏨 Of course! I can help you find a hotel. Tell me which city you want to stay in.";
+      return "🏨 Of course! I can help you find hotels. Go to the Hotels page to search by destination, rating, and price.";
     }
+
+    /* =========================
+       GENERAL DESTINATIONS
+    ========================= */
 
     if (
       lowerText.includes("paris") ||
-      lowerText.includes("باريس")
+      lowerText.includes("باريس") ||
+      lowerText.includes("france") ||
+      lowerText.includes("فرنسا")
     ) {
-      return "🇫🇷 Paris is a great choice! You can explore our available flights and hotels in Paris.";
+      return "🇫🇷 Paris is a wonderful destination! Our current flight database doesn't contain a Paris flight yet, but you can explore available hotels and destinations on TravelBook.";
     }
+
+    /* =========================
+       HELP
+    ========================= */
 
     if (
-      lowerText.includes("dubai") ||
-      lowerText.includes("دبي")
+      lowerText.includes("help") ||
+      lowerText.includes("مساعدة") ||
+      lowerText.includes("ساعدني")
     ) {
-      return "🇦🇪 Dubai is an amazing destination! I can help you find flights and hotels there.";
+      return (
+        "🤖 I can help you with:\n\n" +
+        "✈️ Flights and schedules\n" +
+        "💰 Flight prices\n" +
+        "🏨 Hotels\n" +
+        "🌍 Destinations\n\n" +
+        "Try asking: \"رحلات دبي بكام؟\""
+      );
     }
 
-    if (
-      lowerText.includes("istanbul") ||
-      lowerText.includes("اسطنبول")
-    ) {
-      return "🇹🇷 Istanbul is a wonderful destination! Would you like to search for a flight or hotel?";
-    }
+    /* =========================
+       DEFAULT
+    ========================= */
 
-    if (
-      lowerText.includes("price") ||
-      lowerText.includes("prices") ||
-      lowerText.includes("سعر") ||
-      lowerText.includes("اسعار")
-    ) {
-      return "💰 I can help you find options based on your budget. Tell me your destination and approximate budget.";
-    }
-
-    return "🤖 Thanks for your message! I can currently help you with flights, hotels, destinations, and prices. What would you like to search for?";
+    return (
+      "🤖 I'm your TravelBook travel assistant.\n\n" +
+      "You can ask me things like:\n\n" +
+      "✈️ \"رحلات دبي بكام؟\"\n" +
+      "🕐 \"مواعيد رحلات تركيا\"\n" +
+      "💰 \"Flights to Doha price\"\n" +
+      "🏨 \"I need a hotel\"\n\n" +
+      "I'll show you the available information from TravelBook."
+    );
   };
 
   return (
     <>
       {/* Chat Window */}
+
       {isOpen && (
         <div className="ai-chat-window">
 
           {/* Header */}
+
           <div className="ai-chat-header">
             <div className="ai-chat-title">
+
               <div className="ai-chat-avatar">
                 <Bot size={20} />
               </div>
@@ -140,6 +294,7 @@ function AIChat() {
                 <strong>TravelBook AI</strong>
                 <span>Online • Travel Assistant</span>
               </div>
+
             </div>
 
             <button
@@ -153,6 +308,7 @@ function AIChat() {
           </div>
 
           {/* Messages */}
+
           <div className="ai-chat-messages">
 
             {messages.map((item) => (
@@ -165,14 +321,12 @@ function AIChat() {
                 }
               >
 
-                {/* AI Avatar */}
                 {item.sender === "ai" && (
                   <div className="ai-message-avatar">
                     <Bot size={16} />
                   </div>
                 )}
 
-                {/* Message */}
                 <div
                   className={
                     item.sender === "user"
@@ -180,10 +334,11 @@ function AIChat() {
                       : "ai-message-content"
                   }
                 >
-                  <p>{item.text}</p>
+                  <p style={{ whiteSpace: "pre-line" }}>
+                    {item.text}
+                  </p>
                 </div>
 
-                {/* User Avatar */}
                 {item.sender === "user" && (
                   <div className="user-message-avatar">
                     <User size={16} />
@@ -196,6 +351,7 @@ function AIChat() {
           </div>
 
           {/* Input */}
+
           <div className="ai-chat-input">
 
             <input
@@ -222,10 +378,12 @@ function AIChat() {
             </button>
 
           </div>
+
         </div>
       )}
 
       {/* Floating Button */}
+
       {!isOpen && (
         <button
           type="button"
