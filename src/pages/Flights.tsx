@@ -122,7 +122,9 @@ function Flights() {
   return (
     <main className="flights-page">
 
-      {/* HERO */}
+      {/* =========================================
+          HERO
+      ========================================= */}
 
       <section className="flight-hero">
 
@@ -130,8 +132,11 @@ function Flights() {
 
         <div className="flight-hero-content">
 
+          {/* HERO HEADING */}
+
           <div className="flight-hero-heading">
-            <span>
+
+            <span className="flight-brand-label">
               TRAVELBOOK
             </span>
 
@@ -142,67 +147,86 @@ function Flights() {
             </h1>
 
             <p>
-              Find the best flights, compare
-              prices and travel with confidence.
+              Find the best flights, compare prices
+              and travel with confidence.
             </p>
+
           </div>
 
-          {/* SEARCH CARD */}
+
+          {/* =========================================
+              SEARCH CARD
+          ========================================= */}
 
           <div className="flight-search-card">
 
-            {/* TABS */}
+            {/* TOP ROW */}
 
-            <div className="flight-search-tabs">
+            <div className="flight-search-top">
 
-              <button
-                type="button"
-                className="active"
-              >
-                <Plane size={18} />
-                Flights
-              </button>
+              {/* TABS */}
 
-              <button
-                type="button"
-                onClick={() => navigate("/hotels")}
-              >
-                Hotels
-              </button>
+              <div className="flight-search-tabs">
+
+                <button
+                  type="button"
+                  className="active"
+                >
+                  <Plane size={20} />
+                  <span>Flights</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => navigate("/hotels")}
+                >
+                  <span>Hotels</span>
+                </button>
+
+              </div>
+
+
+              {/* TRIP TYPE */}
+
+              <div className="flight-trip-types">
+
+                <label>
+                  <input
+                    type="radio"
+                    checked={tripType === "one-way"}
+                    onChange={() =>
+                      setTripType("one-way")
+                    }
+                  />
+
+                  <span className="custom-radio" />
+
+                  <span>One way</span>
+                </label>
+
+
+                <label>
+                  <input
+                    type="radio"
+                    checked={tripType === "round-trip"}
+                    onChange={() =>
+                      setTripType("round-trip")
+                    }
+                  />
+
+                  <span className="custom-radio" />
+
+                  <span>Round trip</span>
+                </label>
+
+              </div>
 
             </div>
 
-            {/* TRIP TYPE */}
 
-            <div className="flight-trip-types">
-
-              <label>
-                <input
-                  type="radio"
-                  checked={tripType === "one-way"}
-                  onChange={() =>
-                    setTripType("one-way")
-                  }
-                />
-                <span />
-                One way
-              </label>
-
-              <label>
-                <input
-                  type="radio"
-                  checked={tripType === "round-trip"}
-                  onChange={() =>
-                    setTripType("round-trip")
-                  }
-                />
-                <span />
-                Round trip
-              </label>
-
-            </div>
-
-            {/* SEARCH FIELDS */}
+            {/* =========================================
+                SEARCH FIELDS
+            ========================================= */}
 
             <div className="flight-search-fields">
 
@@ -216,7 +240,7 @@ function Flights() {
 
                 <div className="flight-field-value">
 
-                  <Plane size={18} />
+                  <Plane size={21} />
 
                   <select
                     value={from}
@@ -245,11 +269,12 @@ function Flights() {
                     </option>
                   </select>
 
-                  <ChevronDown size={15} />
+                  <ChevronDown size={17} />
 
                 </div>
 
               </div>
+
 
               {/* SWAP */}
 
@@ -259,8 +284,9 @@ function Flights() {
                 onClick={handleSwap}
                 aria-label="Swap airports"
               >
-                <ArrowRightLeft size={17} />
+                <ArrowRightLeft size={19} />
               </button>
+
 
               {/* TO */}
 
@@ -272,7 +298,7 @@ function Flights() {
 
                 <div className="flight-field-value">
 
-                  <Plane size={18} />
+                  <Plane size={21} />
 
                   <select
                     value={to}
@@ -301,11 +327,12 @@ function Flights() {
                     </option>
                   </select>
 
-                  <ChevronDown size={15} />
+                  <ChevronDown size={17} />
 
                 </div>
 
               </div>
+
 
               {/* DEPARTURE */}
 
@@ -317,7 +344,7 @@ function Flights() {
 
                 <div className="flight-field-value">
 
-                  <CalendarDays size={18} />
+                  <CalendarDays size={21} />
 
                   <input
                     type="text"
@@ -332,6 +359,7 @@ function Flights() {
 
               </div>
 
+
               {/* PASSENGERS */}
 
               <div className="flight-search-field">
@@ -342,7 +370,7 @@ function Flights() {
 
                 <div className="flight-field-value">
 
-                  <Users size={18} />
+                  <Users size={21} />
 
                   <select
                     value={passengers}
@@ -371,11 +399,12 @@ function Flights() {
                     </option>
                   </select>
 
-                  <ChevronDown size={15} />
+                  <ChevronDown size={17} />
 
                 </div>
 
               </div>
+
 
               {/* CLASS */}
 
@@ -410,22 +439,25 @@ function Flights() {
                     </option>
                   </select>
 
-                  <ChevronDown size={15} />
+                  <ChevronDown size={17} />
 
                 </div>
 
               </div>
 
-              <button
-                type="button"
-                className="flight-search-btn"
-                onClick={handleSearch}
-              >
-                <Search size={19} />
-                Search Flights
-              </button>
-
             </div>
+
+
+            {/* SEARCH BUTTON */}
+
+            <button
+              type="button"
+              className="flight-search-btn"
+              onClick={handleSearch}
+            >
+              <Search size={21} />
+              <span>Search Flights</span>
+            </button>
 
           </div>
 
@@ -434,7 +466,9 @@ function Flights() {
       </section>
 
 
-      {/* RESULTS */}
+      {/* =========================================
+          RESULTS
+      ========================================= */}
 
       <section className="flight-results-section">
 
@@ -458,6 +492,9 @@ function Flights() {
             </p>
 
           </div>
+
+
+          {/* SORT */}
 
           <div className="flight-sort-box">
 
@@ -500,7 +537,9 @@ function Flights() {
         </div>
 
 
-        {/* FILTER BAR */}
+        {/* =========================================
+            FILTER BAR
+        ========================================= */}
 
         <div className="flight-filter-bar">
 
@@ -535,6 +574,7 @@ function Flights() {
           <div className="flight-filter-item flight-price-filter">
 
             <div>
+
               <label>
                 Maximum price
               </label>
@@ -542,6 +582,7 @@ function Flights() {
               <strong>
                 ${maxPrice}
               </strong>
+
             </div>
 
             <input
@@ -562,17 +603,21 @@ function Flights() {
         </div>
 
 
-        {/* FLIGHTS */}
+        {/* =========================================
+            FLIGHTS LIST
+        ========================================= */}
 
         {filteredFlights.length > 0 ? (
 
           <div className="flights-list">
 
             {filteredFlights.map((flight) => (
+
               <FlightCard
                 key={flight.id}
                 flight={flight}
               />
+
             ))}
 
           </div>
